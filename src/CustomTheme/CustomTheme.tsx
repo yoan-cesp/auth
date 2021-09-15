@@ -1,6 +1,6 @@
 import {
   colors,
-  createMuiTheme,
+  createTheme,
   Theme,
   useMediaQuery,
   ThemeOptions,
@@ -73,7 +73,7 @@ function usePrefersDarkMode(): boolean {
 export function useCreateCustomTheme(): ThemeData {
   const prefersDarkMode = usePrefersDarkMode();
   const [theme, setTheme] = useState<Theme>(
-    createMuiTheme({
+    createTheme({
       ...initialThemeObject,
       palette: {
         ...initialThemeObject.palette,
@@ -86,9 +86,9 @@ export function useCreateCustomTheme(): ThemeData {
     setTheme((currentTheme) => {
       const isNewThemeDark = currentTheme.palette.type !== "dark";
       LocalTheme.setLocalTheme(isNewThemeDark);
-      if (isNewThemeDark) return createMuiTheme({ palette: { type: "dark" } });
+      if (isNewThemeDark) return createTheme({ palette: { type: "dark" } });
 
-      return createMuiTheme({
+      return createTheme({
         palette: {
           type: "light",
         },
@@ -105,7 +105,7 @@ type Props = {
 };
 
 export const CustomThemeContext = React.createContext<ThemeData>({
-  theme: createMuiTheme(initialThemeObject),
+  theme: createTheme(initialThemeObject),
   toggleTheme: () => {},
 });
 

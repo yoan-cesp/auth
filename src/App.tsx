@@ -1,6 +1,7 @@
 import { Box, Button, Container, CssBaseline } from "@material-ui/core";
 import React, { FC } from "react";
 import CustomTheme, { useCreateCustomTheme } from "./CustomTheme";
+import Login from "./components/Login/Login";
 
 const App: FC = function App() {
   const themeData = useCreateCustomTheme();
@@ -9,20 +10,7 @@ const App: FC = function App() {
       <CssBaseline />
       <Container>
         <Box className="App">
-          <header className="App-header">
-            <p>
-              Bootstraped with Create-React-App, This repo uses material ui and
-              comes with react, typescript, prettier, eslint and a custom theme
-              switcher to get you going.
-            </p>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={themeData.toggleTheme}
-            >
-              Toggle theme
-            </Button>
-          </header>
+          <Login />
         </Box>
       </Container>
     </CustomTheme>
