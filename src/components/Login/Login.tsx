@@ -1,21 +1,56 @@
 import React, { useState } from "react";
-import { makeStyles, TextField, Button } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Card,
+  Container,
+  makeStyles,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  main: {
+    height: "100%",
     display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
     alignItems: "center",
+    justifyContent: "center",
+  },
+  root: {
+    backgroundColor: "#f5f5f5",
     padding: theme.spacing(2),
 
     "& .MuiTextField-root": {
-      margin: theme.spacing(1),
-      width: "300px",
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
+      background: theme.palette.background.default,
     },
+
+    "& .MuiFilledInput-input": {
+      background: theme.palette.background.default,
+    },
+
+    "& .MuiFilledInput-root": {
+      background: theme.palette.background.default,
+    },
+
+    "& .MuiInputBase-input": {
+      background: theme.palette.background.default,
+    },
+
     "& .MuiButtonBase-root": {
-      margin: theme.spacing(2),
+      flexGrow: 1,
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
     },
+  },
+  field: {
+    background: theme.palette.background.default,
+  },
+  cardFooter: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
 }));
 
@@ -31,28 +66,51 @@ const Login = () => {
   };
 
   return (
-    <form className={classes.root} onSubmit={handleSubmit}>
-      <TextField
-        label="Usuario"
-        variant="filled"
-        required
-        value={user}
-        onChange={(e) => setUser(e.target.value)}
-      />
-      <TextField
-        label="Contraseña"
-        variant="filled"
-        type="password"
-        required
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <div>
-        <Button type="submit" variant="contained" color="primary">
-          Ingresar
-        </Button>
-      </div>
-    </form>
+    <Container component="main" className={classes.main} maxWidth={"xs"}>
+      <Card elevation={7} className={classes.root}>
+        <Typography component="h1" variant="h5" align="center">
+          Autenticación
+        </Typography>
+        <Box className={classes.root} sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            fullWidth
+            id="user"
+            name="user"
+            autoFocus
+            label="Usuario"
+            variant="filled"
+            type="text"
+            required
+            value={user}
+            className={classes.field}
+            onChange={(e) => setUser(e.target.value)}
+          />
+          <TextField
+            margin="normal"
+            fullWidth
+            name="password"
+            id="password"
+            label="Contraseña"
+            variant="filled"
+            type="password"
+            required
+            className={classes.field}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <div className={classes.cardFooter}>
+            <Button
+              onClick={handleSubmit}
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
+              Ingresar
+            </Button>
+          </div>
+        </Box>
+      </Card>
+    </Container>
   );
 };
 
