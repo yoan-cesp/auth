@@ -2,9 +2,9 @@ import {
   colors,
   createTheme,
   Theme,
-  useMediaQuery,
   ThemeOptions,
   ThemeProvider,
+  useMediaQuery,
 } from "@material-ui/core";
 import React, { FC, ReactNode, useCallback, useState } from "react";
 
@@ -18,9 +18,14 @@ export type ThemeData = {
 
 const initialThemeObject: ThemeOptions = {
   palette: {
-    primary: colors.pink,
+    primary: {
+      main: "#2196f3",
+    },
     secondary: colors.deepPurple,
     type: "dark",
+    background: {
+      default: "#f5f5f5",
+    },
   },
   props: {
     MuiButton: {
@@ -35,7 +40,7 @@ class LocalTheme {
   static setLocalTheme(isDark: boolean) {
     if ("localStorage" in window) {
       const themePreferenceObject: ThemePreferenceObject = {
-        prefersDarkMode: isDark === true,
+        prefersDarkMode: isDark,
       };
       localStorage.setItem(
         this.themeKey,
