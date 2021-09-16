@@ -20,6 +20,7 @@ const initialThemeObject: ThemeOptions = {
   palette: {
     primary: {
       main: "#2196f3",
+      light: "#ffffff",
     },
     secondary: colors.deepPurple,
     type: "dark",
