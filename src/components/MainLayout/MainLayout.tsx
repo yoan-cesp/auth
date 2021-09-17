@@ -166,7 +166,9 @@ export default function Dashboard() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}></Container>
+        <Container maxWidth="lg" className={classes.container}>
+          he
+        </Container>
       </main>
     </div>
   );

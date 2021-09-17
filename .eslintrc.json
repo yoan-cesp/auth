@@ -21,11 +21,7 @@
   },
   "rules": {
     "linebreak-style": "off",
-    "prettier/prettier": [
-      "error",
-      {
-        "endOfLine": "auto"
-      }
-    ]
+    "prettier/prettier": 0,
+    "max-len": ["error", { "code": 80, "tabWidth": 2, "ignoreComments": true }]
   }
 }
