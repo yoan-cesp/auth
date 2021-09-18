@@ -12,7 +12,9 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import clsx from "clsx";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 import {
   mainListItems,
   secondaryListItems,
@@ -100,9 +102,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Dashboard() {
+const Dashboard = (props: any) => {
   const [open, setOpen] = useState(true);
   const classes = useStyles();
+  const history = useHistory();
+
+  useEffect(() => {
+    if (!props.jwtToken) {
+      history.push("/login");
+    }
+  }, [history, props.jwtToken]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -110,7 +119,6 @@ export default function Dashboard() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  //   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
@@ -172,4 +180,17 @@ export default function Dashboard() {
       </main>
     </div>
   );
+};
+
+function mapStateToProps(state: any) {
+  return {
+    jwtToken: state.Auth.jwtToken,
+    status: state.Auth.status,
+  };
 }
+
+function mapDispatchToProps(dispatch: any) {
+  return {};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

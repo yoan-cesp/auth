@@ -1,26 +1,10 @@
 import {
+  FAILURE_STATE,
   INITIAL_STATE,
   SUCCESS_STATE,
-  FAILURE_STATE,
 } from "../../../constans/actionTypes";
 
-interface SystemInfo {
-  loading: Boolean;
-  activeCd: String;
-  error: String;
-  data: Object;
-}
-
-const initialState = (): SystemInfo => {
-  return {
-    loading: false,
-    activeCd: "",
-    error: "",
-    data: {},
-  };
-};
-
-const globalState = (state = initialState, action: any) => {
+const globalState = (state = {}, action: any) => {
   switch (action.type) {
     case INITIAL_STATE:
       return {
