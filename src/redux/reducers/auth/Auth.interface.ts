@@ -3,6 +3,7 @@ export default interface AuthInfo {
   jwtToken: String | null;
   oauthLoginUrl: String | null;
   codeVerifier: String | null;
+  codeChanllenge: String | null;
   code: String | null;
   errorCode: String | null;
   customErrorMessage: String | null;

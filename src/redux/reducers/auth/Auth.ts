@@ -1,41 +1,41 @@
 import {
-  LOGIN_PROCESING,
-  LOGIN_REQUEST_SUCCESS,
+  LOGIN_CODE_PROCESING,
+  LOGIN_CODE_REQUESTING,
+  LOGIN_CODE_REQUEST_FAILURE,
+  LOGIN_CODE_REQUEST_SUCCESS,
   LOGOUT,
   OAUTH_LOGIN_TOKEN_REQUEST,
   OAUTH_LOGIN_TOKEN_REQUEST_FAILURE,
   OAUTH_LOGIN_TOKEN_REQUEST_SUCCESS,
 } from "../../../constans/actionTypes";
 import { STATUS } from "../../../constans/common";
-import AuthInfo from "./Auth.interface";
 
-const initialState = (): AuthInfo => {
-  return {
-    jwtToken: null,
-    errorCode: null,
-    codeVerifier: null,
-    oauthLoginUrl: null,
-    code: null,
-    status: STATUS.Initial,
-    userData: {},
-    customErrorMessage: null,
-  };
-};
-
-const authState = (state = initialState, action: any) => {
+const authState = (state = {}, action: any) => {
   switch (action.type) {
-    case LOGIN_PROCESING:
+    case LOGIN_CODE_PROCESING:
       return {
         ...state,
         status: STATUS.Procesing,
+        codeVerifier: action.payload.codeVerifier,
+        codeChallenge: action.payload.codeChallenge,
+        // oauthLoginUrl: action.payload.oauthLoginUrl,
       };
-    case LOGIN_REQUEST_SUCCESS:
+    case LOGIN_CODE_REQUESTING:
       return {
         ...state,
-        codeVerifier: action.payload.codeVerifier,
-        oauthLoginUrl: action.payload.oauthLoginUrl,
-        code: action.payload.codeChallenge,
-        status: STATUS.Success,
+        status: STATUS.Loading,
+      };
+    case LOGIN_CODE_REQUEST_SUCCESS:
+      return {
+        ...state,
+        code: action.payload.code,
+      };
+    case LOGIN_CODE_REQUEST_FAILURE:
+      return {
+        ...state,
+        errorCode: action.payload.errorCode,
+        customErrorMessage: action.payload.customErrorMessage,
+        status: STATUS.Error,
       };
     case LOGOUT:
       return {
@@ -51,7 +51,6 @@ const authState = (state = initialState, action: any) => {
     case OAUTH_LOGIN_TOKEN_REQUEST:
       return {
         ...state,
-        status: STATUS.Loading,
       };
     case OAUTH_LOGIN_TOKEN_REQUEST_SUCCESS:
       return {
