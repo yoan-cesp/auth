@@ -1,5 +1,4 @@
 import AppBar from "@material-ui/core/AppBar";
-import Badge from "@material-ui/core/Badge";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import IconButton from "@material-ui/core/IconButton";
@@ -9,12 +8,63 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import MenuIcon from "@material-ui/icons/Menu";
-import NotificationsIcon from "@material-ui/icons/Notifications";
 import clsx from "clsx";
 import React, { useState } from "react";
-import { mainListItems, secondaryListItems } from "../SideNav/SideNav";
+import { ListMenuItem, MainListItems } from "../SideNav/SideNav";
+import { connect, useDispatch } from "react-redux";
+import { PowerSettingsNew } from "@material-ui/icons";
+import { bindActionCreators } from "redux";
+import {
+  getCode,
+  processLogin,
+  processLogout,
+} from "../../../../redux/actions/authAction";
 
 const drawerWidth = 240;
+
+const menuItems: ListMenuItem[] = [
+  {
+    key: "dashboard",
+    icon: "Dashboard",
+    label: "Inicio",
+  },
+  {
+    key: "settings",
+    icon: "Settings",
+    label: "Configuración",
+  },
+  {
+    key: "maestros",
+    icon: "LocalShipping",
+    label: "Maestros",
+    children: [
+      { key: "transportistas", label: "Transportistas" },
+      { key: "conductores", label: "Conductores" },
+      { key: "camiones", label: "Camiones" },
+    ],
+  },
+  {
+    key: "guias_retornos",
+    icon: "Assignment",
+    label: "Guias y retornos",
+    children: [
+      { key: "gd", label: "Generar guías" },
+      { key: "cgdr", label: "Consultar guías" },
+      { key: "gp", label: "Guías pendientes" },
+      { key: "gr", label: "Gestionar retornos" },
+      { key: "rp", label: "Retornos pendientes" },
+    ],
+  },
+  {
+    key: "informes",
+    icon: "Assessment",
+    label: "Informes",
+    children: [
+      { key: "rgg", label: "Guías generadas" },
+      { key: "af", label: "Archivo de facturación" },
+    ],
+  },
+];
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -80,15 +130,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DrawerApp = () => {
+const DrawerApp = (props: any) => {
   const [open, setOpen] = useState(true);
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+  const logout = () => {
+    processLogout(dispatch);
   };
 
   return (
@@ -119,10 +173,8 @@ const DrawerApp = () => {
           >
             Dashboard
           </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
+          <IconButton color="inherit" onClick={logout}>
+            <PowerSettingsNew />
           </IconButton>
         </Toolbar>
       </AppBar>
@@ -134,17 +186,41 @@ const DrawerApp = () => {
         open={open}
       >
         <div className={classes.toolbarIcon}>
+          <Typography
+            component="h1"
+            variant="h6"
+            color="inherit"
+            align={"center"}
+            noWrap
+            className={classes.title}
+          >
+            {`${props.user?.firstName} ${props.user?.lastName}`}
+          </Typography>
+
           <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
           </IconButton>
         </div>
         <Divider />
-        <List>{mainListItems}</List>
-        <Divider />
-        <List>{secondaryListItems}</List>
+        <List>
+          <MainListItems items={menuItems} />
+        </List>
       </Drawer>
     </>
   );
 };
 
-export default DrawerApp;
+function mapStateToProps(state: any) {
+  return {
+    user: state.Auth.userData,
+  };
+}
+
+function mapDispatchToProps(dispatch: any) {
+  return {
+    processLogin: bindActionCreators(processLogin, dispatch),
+    getCode: bindActionCreators(getCode, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DrawerApp);

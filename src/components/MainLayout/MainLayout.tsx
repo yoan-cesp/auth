@@ -37,7 +37,7 @@ const Dashboard = (props: any) => {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          he
+          <div />
         </Container>
       </main>
     </div>
