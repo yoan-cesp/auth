@@ -4,9 +4,11 @@ import {
   LOGIN_CODE_REQUEST_FAILURE,
   LOGIN_CODE_REQUEST_SUCCESS,
   OAUTH_LOGIN_TOKEN_REQUEST_SUCCESS,
+  LOGOUT,
 } from "../../constans/actionTypes";
 import { generateCodesPKCE } from "../../helpers/loginHelper";
 import authService from "../../services/authService/AuthServices";
+import userService from "../../services/userService/UserService";
 
 const processLoginAction = (payload: any) => {
   return {
@@ -42,23 +44,32 @@ const getAccessTokenAction = (payload: any) => {
   };
 };
 
+const logout = () => {
+  return {
+    type: LOGOUT,
+    payload: {},
+  };
+};
+
 export const processLogin = async (dispatch: any) => {
   try {
     const { codeVerifier, codeChallenge } = await generateCodesPKCE();
-
-    // const clientId = process.env.REACT_APP_OAUTH_SERVER_CLIENT_ID;
-    // const serverUrl = process.env.REACT_APP_OAUTH_SERVER_URL;
-    // const codeChallengeMethod = "5256";
-    // const responseType = "code";
-    // const scopes = "openid";
-    // const oauthLoginUrl = `${serverUrl}?code_challenge=${codeChallenge}&code_challenge_method=${codeChallengeMethod}&response_type=${responseType}&client_id=${clientId}&scopes=${scopes}&redirect=false`;
-
     dispatch(processLoginAction({ codeVerifier, codeChallenge }));
   } catch (error) {
     console.error(error);
     dispatch(
       processLoginFailure({ errorCode: "User", customErrorMessage: "Error" })
     );
+  }
+};
+
+export const processLogout = async (dispatch: any) => {
+  try {
+    dispatch(logout());
+    await userService.closeSession();
+    authService.clearSecurityData();
+  } catch (error) {
+    console.error(error);
   }
 };
 

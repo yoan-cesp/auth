@@ -1,11 +1,15 @@
 import { AxiosInstance, AxiosPromise } from "axios";
 import { createHttpAxios } from "../httpService/http";
 
+const baseURL: string = process.env.REACT_APP_BASE_URL || "";
+
 export class BaseService {
   public httpAxios: AxiosInstance;
 
   constructor(url: string) {
-    this.httpAxios = createHttpAxios(url);
+    this.httpAxios = createHttpAxios(url, {
+      baseURL: baseURL,
+    });
   }
 
   public create(url: string, item: any): AxiosPromise<any> {

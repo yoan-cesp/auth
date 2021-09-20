@@ -62,7 +62,7 @@ class AuthServiceAPI {
   }
 
   public clearUser(): void {
-    localStorage.removeItem("user");
+    localStorage.removeItem("userdata");
   }
 
   public clearSecurityData(): void {

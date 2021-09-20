@@ -1,70 +1,103 @@
-import React from "react";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListSubheader from "@material-ui/core/ListSubheader";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import PeopleIcon from "@material-ui/icons/People";
-import BarChartIcon from "@material-ui/icons/BarChart";
-import LayersIcon from "@material-ui/icons/Layers";
-import AssignmentIcon from "@material-ui/icons/Assignment";
+import React, { useState } from "react";
+import {
+  Collapse,
+  Divider,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from "@material-ui/core";
+import { ExpandLess, ExpandMore } from "@material-ui/icons";
+import { makeStyles } from "@material-ui/core/styles";
 
-export const mainListItems = (
-  <div>
-    <ListItem button>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="Dashboard" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <ShoppingCartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Orders" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <PeopleIcon />
-      </ListItemIcon>
-      <ListItemText primary="Customers" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Reports" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <LayersIcon />
-      </ListItemIcon>
-      <ListItemText primary="Integrations" />
-    </ListItem>
-  </div>
-);
+interface PropsInterface {
+  icon: string;
+}
 
-export const secondaryListItems = (
-  <div>
-    <ListSubheader inset>Saved reports</ListSubheader>
-    <ListItem button>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Current month" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Last quarter" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Year-end sale" />
-    </ListItem>
-  </div>
-);
+export interface ListMenuItem {
+  key: string;
+  label: string;
+  icon?: string;
+  children?: ListMenuItem[];
+}
+
+interface MainListPropsInterface {
+  items: ListMenuItem[];
+}
+
+const useStyles = makeStyles((theme) => ({
+  parent: {
+    fontWeight: "bold",
+  },
+}));
+
+const MaterialIcon = (props: PropsInterface) => {
+  let resolved = require(`@material-ui/icons/${props.icon}`).default;
+
+  return React.createElement(resolved);
+};
+
+export const MainListItems = (props: MainListPropsInterface) => {
+  const [open, setOpen] = useState("");
+  const classes = useStyles();
+  const toggleMenuItem = (event: any, key: string, hasChildren: boolean) => {
+    event.preventDefault();
+    if (hasChildren) {
+      const newValue = key === open ? "" : key;
+      setOpen(newValue);
+    }
+  };
+
+  return (
+    <>
+      {props.items.map((item) => {
+        const isItemOpen = item.key === open;
+        const isItemCollapseShown = !!(
+          item.children && item.children.length > 0
+        );
+        return (
+          <div key={item.key}>
+            <ListItem
+              className={classes.parent}
+              button
+              onClick={(e) => toggleMenuItem(e, item.key, isItemCollapseShown)}
+            >
+              <ListItemIcon>
+                {item.icon && <MaterialIcon icon={item.icon} />}
+              </ListItemIcon>
+              <ListItemText primary={item.label} />
+              {isItemCollapseShown ? (
+                isItemOpen ? (
+                  <ExpandLess />
+                ) : (
+                  <ExpandMore />
+                )
+              ) : (
+                ""
+              )}
+            </ListItem>
+            {item.children ? (
+              <>
+                <Collapse in={isItemOpen} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    <Divider />
+                    {item.children.map((child: ListMenuItem) => (
+                      <ListItem dense button key={child.key}>
+                        <ListItemIcon>
+                          {child.icon && <MaterialIcon icon={child.icon} />}
+                        </ListItemIcon>
+                        <ListItemText primary={child.label} />
+                      </ListItem>
+                    ))}
+                  </List>
+                </Collapse>
+              </>
+            ) : (
+              ""
+            )}
+          </div>
+        );
+      })}
+    </>
+  );
+};
