@@ -23,6 +23,25 @@
     "linebreak-style": "off",
     "no-console": 2,
     "prettier/prettier": 0,
-    "max-len": ["error", { "code": 80, "tabWidth": 2, "ignoreComments": true }]
+    "max-len": ["error", { "code": 80, "tabWidth": 2, "ignoreComments": true }],
+    "no-extend-native": 2,
+    "no-mixed-spaces-and-tabs": 2,
+    "no-trailing-spaces": 2,
+    "curly": 2,
+    "eol-last": 2,
+    "array-bracket-spacing": [2, "never"],
+    "block-scoped-var": 2,
+    "brace-style": [2, "1tbs"],
+    "camelcase": 1,
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "always-multiline",
+        "objects": "always-multiline",
+        "imports": "always-multiline",
+        "exports": "always-multiline",
+        "functions": "ignore"
+      }
+    ]
   }
 }
